@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+/* ===================================================
+   Tailwind v4 CSS-first 主题配置
+   自定义颜色在此注册后即可作为 Tailwind 工具类使用
+   =================================================== */
+@theme {
+  /* 主色 — 深石墨黑、碳灰 */
+  --color-charcoal-950: #080808;
+  --color-charcoal-900: #111111;
+  --color-charcoal-800: #1a1a1a;
+  --color-charcoal-700: #242424;
+  --color-charcoal-600: #2e2e2e;
+  --color-charcoal-500: #3d3d3d;
+  --color-charcoal-400: #4a4a4a;
+  --color-charcoal-300: #5e5e5e;
+  --color-charcoal-200: #747474;
+  --color-charcoal-100: #8a8a8a;
+
+  /* 暖白、石材色 */
+  --color-warm-50: #faf9f7;
+  --color-warm-100: #f5f1ec;
+  --color-warm-200: #e8e0d6;
+  --color-warm-300: #d6cbbf;
+  --color-warm-400: #b8a99a;
+  --color-warm-500: #9a8a7b;
+  --color-warm-600: #7d6e61;
+
+  /* 砂岩金、金属铜 */
+  --color-gold-300: #e8d5b0;
+  --color-gold-400: #d4b87a;
+  --color-gold-500: #c4a35a;
+  --color-gold-600: #a8863c;
+  --color-gold-700: #8b6914;
+
+  /* 深蓝灰 */
+  --color-slate-deep-700: #2c3e50;
+  --color-slate-deep-800: #1e2d3d;
+  --color-slate-deep-900: #141f2b;
+
+  /* 字体 */
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC",
+    system-ui, -apple-system, sans-serif;
+
+  /* 自定义动画 */
+  --animate-fade-up: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fadeIn 1s ease forwards;
+  --animate-slide-right: slideRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-grain: grain 8s steps(10) infinite;
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0);     }
+  }
+
+  @keyframes grain {
+    0%,100% { transform: translate(0, 0);     }
+    10%     { transform: translate(-5%, -10%); }
+    20%     { transform: translate(-15%, 5%);  }
+    30%     { transform: translate(7%, -25%);  }
+    40%     { transform: translate(-5%, 25%);  }
+    50%     { transform: translate(-15%, 10%); }
+    60%     { transform: translate(15%, 0%);   }
+    70%     { transform: translate(0%, 15%);   }
+    80%     { transform: translate(3%, 35%);   }
+    90%     { transform: translate(-10%, 10%); }
+  }
+}
+
+/* ===================================================
+   基础样式
+   =================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #111111;
+  color: #f5f1ec;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar             { width: 3px; }
+::-webkit-scrollbar-track       { background: #111111; }
+::-webkit-scrollbar-thumb       { background: #c4a35a; border-radius: 2px; }
+
+/* ===================================================
+   颗粒质感纹理 — 提升整体高级感
+   =================================================== */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
+}
+
+/* ===================================================
+   屋面瓦片线条纹理
+   =================================================== */
+.tile-pattern {
+  background-image:
+    repeating-linear-gradient(-45deg, transparent, transparent 20px,
+      rgba(196,163,90,0.04) 20px, rgba(196,163,90,0.04) 21px),
+    repeating-linear-gradient( 45deg, transparent, transparent 20px,
+      rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 21px);
+}
+
+/* ===================================================
+   磨砂玻璃导航
+   =================================================== */
+.glass-nav {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background-color: rgba(17,17,17,0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ===================================================
+   大标题 — 响应式
+   =================================================== */
+.display-title {
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+}
+
+/* ===================================================
+   章节标签（上方小文字）
+   =================================================== */
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c4a35a;
+}
+
+/* 金色分割线 */
+.gold-divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, #c4a35a, transparent);
+  margin: 1.5rem 0;
+}
+
+/* ===================================================
+   按钮基础
+   =================================================== */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #f5f1ec;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(196,163,90,0.1);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-outline:hover {
+  border-color: #c4a35a;
+  color: #c4a35a;
+}
+
+.btn-outline:hover::before {
+  transform: translateX(0);
+}
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #c4a35a;
+  color: #111111;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  background: #d4b87a;
+}
+
+/* ===================================================
+   卡片图片缩放
+   =================================================== */
+.img-zoom { overflow: hidden; }
+.img-zoom .img-inner {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.img-zoom:hover .img-inner {
+  transform: scale(1.06);
+}
+
+/* ===================================================
+   筛选标签
+   =================================================== */
+.filter-tag {
+  padding: 0.4rem 1.1rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: rgba(245,241,236,0.6);
+  white-space: nowrap;
+}
+.filter-tag:hover,
+.filter-tag.active {
+  border-color: #c4a35a;
+  color: #c4a35a;
+  background: rgba(196,163,90,0.08);
+}
+
+/* ===================================================
+   参数表格
+   =================================================== */
+.spec-row {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0.9rem 0;
+  transition: background 0.2s ease;
+}
+.spec-row:hover {
+  background: rgba(196,163,90,0.04);
+}
+
+/* ===================================================
+   表单输入框
+   =================================================== */
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #f5f1ec;
+  padding: 0.875rem 1rem;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  outline: none;
+  font-family: inherit;
+}
+.form-input:focus {
+  border-color: #c4a35a;
+  background: rgba(196,163,90,0.04);
+}
+.form-input::placeholder {
+  color: rgba(245,241,236,0.25);
+}
+
+/* ===================================================
+   颜色色卡
+   =================================================== */
+.color-swatch {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.color-swatch:hover,
+.color-swatch.active {
+  border-color: #c4a35a;
+  transform: scale(1.08);
+}
+
+/* ===================================================
+   产品图片占位 — 真实图片替换后删除
+   =================================================== */
+.product-placeholder {
+  background: linear-gradient(145deg, #242424 0%, #1c1c1c 50%, #2a2a2a 100%);
+}
+
+/* ===================================================
+   移动端优化
+   =================================================== */
+@media (max-width: 768px) {
+  .display-title {
+    font-size: clamp(1.8rem, 8vw, 2.8rem);
+    letter-spacing: -0.01em;
+  }
+}
