@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 
 const projectTypes = [
   '高端住宅 / 别墅',
@@ -13,9 +14,21 @@ const projectTypes = [
   '其他',
 ]
 
+type FormState = {
+  name: string
+  phone: string
+  email: string
+  projectType: string
+  region: string
+  message: string
+}
+
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
-  const [form, setForm] = useState({
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const [form, setForm] = useState<FormState>({
     name: '',
     phone: '',
     email: '',
@@ -28,14 +41,40 @@ export default function ContactForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) {
     setForm({ ...form, [e.target.name]: e.target.value })
+    if (error) setError(null)
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // TODO: 接入真实表单提交接口（如 EmailJS、自建 API 或其他服务）
-    setSubmitted(true)
+    setLoading(true)
+    setError(null)
+
+    try {
+      const supabase = createClient()
+
+      const { error: dbError } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim() || null,
+          region: form.region.trim() || null,
+          project_type: form.projectType || null,
+          message: form.message.trim() || null,
+        })
+
+      if (dbError) throw dbError
+
+      setSubmitted(true)
+    } catch (err) {
+      console.error('表单提交失败:', err)
+      setError('提交失败，请稍后重试或通过电话联系我们。')
+    } finally {
+      setLoading(false)
+    }
   }
 
+  // ── 提交成功状态 ──
   if (submitted) {
     return (
       <motion.div
@@ -45,7 +84,13 @@ export default function ContactForm() {
       >
         <div className="w-12 h-12 border border-gold-500 flex items-center justify-center mx-auto mb-6">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 10l4 4 8-8" stroke="#c4a35a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M4 10l4 4 8-8"
+              stroke="#c4a35a"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
         <h3 className="text-warm-100 text-xl font-light mb-3">需求已提交</h3>
@@ -56,6 +101,7 @@ export default function ContactForm() {
     )
   }
 
+  // ── 表单 ──
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -69,6 +115,7 @@ export default function ContactForm() {
             value={form.name}
             onChange={handleChange}
             required
+            disabled={loading}
           />
         </div>
         <div>
@@ -81,6 +128,7 @@ export default function ContactForm() {
             value={form.phone}
             onChange={handleChange}
             required
+            disabled={loading}
           />
         </div>
       </div>
@@ -95,6 +143,7 @@ export default function ContactForm() {
             placeholder="your@email.com"
             value={form.email}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
         <div>
@@ -106,6 +155,7 @@ export default function ContactForm() {
             placeholder="省份 / 城市"
             value={form.region}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
       </div>
@@ -118,6 +168,7 @@ export default function ContactForm() {
           value={form.projectType}
           onChange={handleChange}
           required
+          disabled={loading}
         >
           <option value="" disabled>请选择项目类型</option>
           {projectTypes.map((t) => (
@@ -135,24 +186,49 @@ export default function ContactForm() {
           placeholder="请简要描述项目情况，如屋面面积、建筑类型、颜色偏好、预计工期等，方便我们提供更精准的建议..."
           value={form.message}
           onChange={handleChange}
+          disabled={loading}
         />
       </div>
 
-      {/* 上传图纸说明 */}
+      {/* 图纸说明 */}
       <div className="border border-dashed border-charcoal-600 p-4 text-center">
         <p className="text-charcoal-300 text-xs">
           如有项目图纸或效果图，可通过邮件发送至我们的联系邮箱，以便提供更准确的产品建议。
         </p>
       </div>
 
+      {/* 错误提示 */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-400"
+        >
+          {error}
+        </motion.div>
+      )}
+
       <button
         type="submit"
-        className="btn-gold w-full justify-center py-4 text-sm font-medium"
+        disabled={loading}
+        className="btn-gold w-full justify-center py-4 text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        提交需求
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-2">
-          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        {loading ? (
+          <>
+            <svg className="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+            </svg>
+            提交中...
+          </>
+        ) : (
+          <>
+            提交需求
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-2">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </>
+        )}
       </button>
 
       <p className="text-charcoal-400 text-xs text-center">
