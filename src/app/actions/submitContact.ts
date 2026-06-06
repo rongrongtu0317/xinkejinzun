@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export type SubmitContactResult =
   | { success: true }
@@ -20,25 +20,20 @@ export async function submitContact(
     return { success: false, error: '姓名和电话为必填项' }
   }
 
-  // 验证环境变量是否已加载（如未加载说明 .env.local 未生效，需重启服务）
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-
-  if (!supabaseUrl || !supabaseKey) {
-    console.error('[Contact Form] 缺少环境变量: 请确认 .env.local 已创建并已重启开发服务器')
-    return { success: false, error: '服务配置错误，请联系管理员（缺少数据库连接配置）' }
-  }
-
   try {
-    const supabase = await createClient()
+    // 直接使用 supabase-js 创建客户端（服务端调用，无需 SSR cookie 封装）
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    )
 
     const { error } = await supabase
       .from('contact_submissions')
       .insert({ name, phone, email, region, project_type: projectType, message })
 
     if (error) {
-      console.error('[Contact Form] Supabase 写入失败:', JSON.stringify(error))
-      return { success: false, error: `提交失败：${error.message || '请稍后重试'}` }
+      console.error('[Contact Form] Supabase 写入失败:', error)
+      return { success: false, error: `提交失败：${error.message}` }
     }
 
     return { success: true }
