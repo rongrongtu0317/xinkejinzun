@@ -1,8 +1,7 @@
 'use client'
 
-import { useActionState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { submitContact, type ContactState } from '@/app/actions/submitContact'
 
 const projectTypes = [
   '高端住宅 / 别墅',
@@ -14,22 +13,67 @@ const projectTypes = [
   '其他',
 ]
 
-const initialState: ContactState = { status: 'idle' }
+type FormState = {
+  name: string
+  phone: string
+  email: string
+  projectType: string
+  region: string
+  message: string
+}
 
 export default function ContactForm() {
-  // React 19 useActionState — Next.js 16 推荐的 Server Action 调用方式
-  // 通过 form action={action} 调用，避免 onSubmit 拦截导致的崩溃
-  const [state, formAction, isPending] = useActionState(submitContact, initialState)
+  const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading]     = useState(false)
+  const [error, setError]         = useState<string | null>(null)
 
-  // 滚动到顶部，让用户看到成功提示（移动端尤其需要）
-  useEffect(() => {
-    if (state.status === 'success') {
+  const [form, setForm] = useState<FormState>({
+    name: '',
+    phone: '',
+    email: '',
+    projectType: '',
+    region: '',
+    message: '',
+  })
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    setForm({ ...form, [e.target.name]: e.target.value })
+    if (error) setError(null)
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok || !data.success) {
+        setError(data.error || '提交失败，请稍后重试')
+        return
+      }
+
+      setSubmitted(true)
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err) {
+      console.error('提交错误:', err)
+      setError('网络异常，请检查网络后重试')
+    } finally {
+      setLoading(false)
     }
-  }, [state.status])
+  }
 
   /* ── 成功页面 ── */
-  if (state.status === 'success') {
+  if (submitted) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -50,40 +94,53 @@ export default function ContactForm() {
     )
   }
 
-  /* ── 表单 ──
-       关键修复：用 form action={formAction}，不用 onSubmit！
-       这是 React 19 + Next 16 Server Action 的正确方式 */
+  /* ── 表单 ── */
   return (
-    <form action={formAction} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">姓名 *</label>
-          <input className="form-input" type="text" name="name"
-            placeholder="您的姓名" required disabled={isPending} />
+          <input
+            className="form-input" type="text" name="name"
+            placeholder="您的姓名" required disabled={loading}
+            value={form.name} onChange={handleChange}
+          />
         </div>
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">联系电话 *</label>
-          <input className="form-input" type="tel" name="phone"
-            placeholder="手机号 / 固定电话" required disabled={isPending} />
+          <input
+            className="form-input" type="tel" name="phone"
+            placeholder="手机号 / 固定电话" required disabled={loading}
+            value={form.phone} onChange={handleChange}
+          />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">邮箱</label>
-          <input className="form-input" type="email" name="email"
-            placeholder="your@email.com" disabled={isPending} />
+          <input
+            className="form-input" type="email" name="email"
+            placeholder="your@email.com" disabled={loading}
+            value={form.email} onChange={handleChange}
+          />
         </div>
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">所在地区</label>
-          <input className="form-input" type="text" name="region"
-            placeholder="省份 / 城市" disabled={isPending} />
+          <input
+            className="form-input" type="text" name="region"
+            placeholder="省份 / 城市" disabled={loading}
+            value={form.region} onChange={handleChange}
+          />
         </div>
       </div>
 
       <div>
         <label className="block text-xs text-charcoal-200 tracking-wider mb-2">项目类型 *</label>
-        <select className="form-input" name="projectType" defaultValue="" required disabled={isPending}>
+        <select
+          className="form-input" name="projectType" required disabled={loading}
+          value={form.projectType} onChange={handleChange}
+        >
           <option value="" disabled>请选择项目类型</option>
           {projectTypes.map((t) => (
             <option key={t} value={t}>{t}</option>
@@ -93,9 +150,11 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-charcoal-200 tracking-wider mb-2">需求描述</label>
-        <textarea className="form-input resize-none" name="message" rows={5}
+        <textarea
+          className="form-input resize-none" name="message" rows={5}
           placeholder="请简要描述项目情况，如屋面面积、建筑类型、颜色偏好、预计工期等，方便我们提供更精准的建议..."
-          disabled={isPending} />
+          disabled={loading} value={form.message} onChange={handleChange}
+        />
       </div>
 
       <div className="border border-dashed border-charcoal-600 p-4 text-center">
@@ -104,24 +163,23 @@ export default function ContactForm() {
         </p>
       </div>
 
-      {/* 错误提示 */}
-      {state.status === 'error' && (
+      {error && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-400"
         >
-          {state.message}
+          {error}
         </motion.div>
       )}
 
       <button
         type="submit"
-        disabled={isPending}
+        disabled={loading}
         className="btn-gold w-full justify-center py-4 text-sm font-medium
                    disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {isPending ? (
+        {loading ? (
           <>
             <svg className="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10"
