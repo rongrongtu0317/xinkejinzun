@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useActionState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { submitContact } from '@/app/actions/submitContact'
+import { submitContact, type ContactState } from '@/app/actions/submitContact'
 
 const projectTypes = [
   '高端住宅 / 别墅',
@@ -14,29 +14,22 @@ const projectTypes = [
   '其他',
 ]
 
+const initialState: ContactState = { status: 'idle' }
+
 export default function ContactForm() {
-  const [submitted, setSubmitted] = useState(false)
-  const [errorMsg, setErrorMsg]   = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
+  // React 19 useActionState — Next.js 16 推荐的 Server Action 调用方式
+  // 通过 form action={action} 调用，避免 onSubmit 拦截导致的崩溃
+  const [state, formAction, isPending] = useActionState(submitContact, initialState)
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setErrorMsg(null)
-
-    const formData = new FormData(e.currentTarget)
-
-    startTransition(async () => {
-      const result = await submitContact(formData)
-      if (result.success) {
-        setSubmitted(true)
-      } else {
-        setErrorMsg(result.error)
-      }
-    })
-  }
+  // 滚动到顶部，让用户看到成功提示（移动端尤其需要）
+  useEffect(() => {
+    if (state.status === 'success') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [state.status])
 
   /* ── 成功页面 ── */
-  if (submitted) {
+  if (state.status === 'success') {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -57,9 +50,11 @@ export default function ContactForm() {
     )
   }
 
-  /* ── 表单 ── */
+  /* ── 表单 ──
+       关键修复：用 form action={formAction}，不用 onSubmit！
+       这是 React 19 + Next 16 Server Action 的正确方式 */
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form action={formAction} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">姓名 *</label>
@@ -88,8 +83,8 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-charcoal-200 tracking-wider mb-2">项目类型 *</label>
-        <select className="form-input" name="projectType" required disabled={isPending}>
-          <option value="" disabled selected>请选择项目类型</option>
+        <select className="form-input" name="projectType" defaultValue="" required disabled={isPending}>
+          <option value="" disabled>请选择项目类型</option>
           {projectTypes.map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}
@@ -110,13 +105,13 @@ export default function ContactForm() {
       </div>
 
       {/* 错误提示 */}
-      {errorMsg && (
+      {state.status === 'error' && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-400"
         >
-          {errorMsg}
+          {state.message}
         </motion.div>
       )}
 
