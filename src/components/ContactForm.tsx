@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { motion } from 'framer-motion'
-import { createClient } from '@/lib/supabase/client'
+import { submitContact } from '@/app/actions/submitContact'
 
 const projectTypes = [
   '高端住宅 / 别墅',
@@ -14,67 +14,28 @@ const projectTypes = [
   '其他',
 ]
 
-type FormState = {
-  name: string
-  phone: string
-  email: string
-  projectType: string
-  region: string
-  message: string
-}
-
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errorMsg, setErrorMsg]   = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
 
-  const [form, setForm] = useState<FormState>({
-    name: '',
-    phone: '',
-    email: '',
-    projectType: '',
-    region: '',
-    message: '',
-  })
-
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) {
-    setForm({ ...form, [e.target.name]: e.target.value })
-    if (error) setError(null)
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setLoading(true)
-    setError(null)
+    setErrorMsg(null)
 
-    try {
-      const supabase = createClient()
+    const formData = new FormData(e.currentTarget)
 
-      const { error: dbError } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          email: form.email.trim() || null,
-          region: form.region.trim() || null,
-          project_type: form.projectType || null,
-          message: form.message.trim() || null,
-        })
-
-      if (dbError) throw dbError
-
-      setSubmitted(true)
-    } catch (err) {
-      console.error('表单提交失败:', err)
-      setError('提交失败，请稍后重试或通过电话联系我们。')
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      const result = await submitContact(formData)
+      if (result.success) {
+        setSubmitted(true)
+      } else {
+        setErrorMsg(result.error)
+      }
+    })
   }
 
-  // ── 提交成功状态 ──
+  /* ── 成功页面 ── */
   if (submitted) {
     return (
       <motion.div
@@ -84,13 +45,8 @@ export default function ContactForm() {
       >
         <div className="w-12 h-12 border border-gold-500 flex items-center justify-center mx-auto mb-6">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path
-              d="M4 10l4 4 8-8"
-              stroke="#c4a35a"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M4 10l4 4 8-8" stroke="#c4a35a" strokeWidth="1.5"
+              strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
         <h3 className="text-warm-100 text-xl font-light mb-3">需求已提交</h3>
@@ -101,76 +57,39 @@ export default function ContactForm() {
     )
   }
 
-  // ── 表单 ──
+  /* ── 表单 ── */
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">姓名 *</label>
-          <input
-            className="form-input"
-            type="text"
-            name="name"
-            placeholder="您的姓名"
-            value={form.name}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
+          <input className="form-input" type="text" name="name"
+            placeholder="您的姓名" required disabled={isPending} />
         </div>
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">联系电话 *</label>
-          <input
-            className="form-input"
-            type="tel"
-            name="phone"
-            placeholder="手机号 / 固定电话"
-            value={form.phone}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
+          <input className="form-input" type="tel" name="phone"
+            placeholder="手机号 / 固定电话" required disabled={isPending} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">邮箱</label>
-          <input
-            className="form-input"
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            value={form.email}
-            onChange={handleChange}
-            disabled={loading}
-          />
+          <input className="form-input" type="email" name="email"
+            placeholder="your@email.com" disabled={isPending} />
         </div>
         <div>
           <label className="block text-xs text-charcoal-200 tracking-wider mb-2">所在地区</label>
-          <input
-            className="form-input"
-            type="text"
-            name="region"
-            placeholder="省份 / 城市"
-            value={form.region}
-            onChange={handleChange}
-            disabled={loading}
-          />
+          <input className="form-input" type="text" name="region"
+            placeholder="省份 / 城市" disabled={isPending} />
         </div>
       </div>
 
       <div>
         <label className="block text-xs text-charcoal-200 tracking-wider mb-2">项目类型 *</label>
-        <select
-          className="form-input"
-          name="projectType"
-          value={form.projectType}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        >
-          <option value="" disabled>请选择项目类型</option>
+        <select className="form-input" name="projectType" required disabled={isPending}>
+          <option value="" disabled selected>请选择项目类型</option>
           {projectTypes.map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}
@@ -179,18 +98,11 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-charcoal-200 tracking-wider mb-2">需求描述</label>
-        <textarea
-          className="form-input resize-none"
-          name="message"
-          rows={5}
+        <textarea className="form-input resize-none" name="message" rows={5}
           placeholder="请简要描述项目情况，如屋面面积、建筑类型、颜色偏好、预计工期等，方便我们提供更精准的建议..."
-          value={form.message}
-          onChange={handleChange}
-          disabled={loading}
-        />
+          disabled={isPending} />
       </div>
 
-      {/* 图纸说明 */}
       <div className="border border-dashed border-charcoal-600 p-4 text-center">
         <p className="text-charcoal-300 text-xs">
           如有项目图纸或效果图，可通过邮件发送至我们的联系邮箱，以便提供更准确的产品建议。
@@ -198,25 +110,27 @@ export default function ContactForm() {
       </div>
 
       {/* 错误提示 */}
-      {error && (
+      {errorMsg && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-400"
         >
-          {error}
+          {errorMsg}
         </motion.div>
       )}
 
       <button
         type="submit"
-        disabled={loading}
-        className="btn-gold w-full justify-center py-4 text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+        disabled={isPending}
+        className="btn-gold w-full justify-center py-4 text-sm font-medium
+                   disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {loading ? (
+        {isPending ? (
           <>
             <svg className="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3"/>
+              <circle className="opacity-25" cx="12" cy="12" r="10"
+                stroke="currentColor" strokeWidth="3"/>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
             </svg>
             提交中...
@@ -225,7 +139,8 @@ export default function ContactForm() {
           <>
             提交需求
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-2">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor"
+                strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </>
         )}
