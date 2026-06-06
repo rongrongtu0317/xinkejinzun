@@ -33,7 +33,7 @@ export default function HeroSection() {
           fill
           priority
           className="object-cover object-center"
-          sizes="100vw"
+          sizes="95vw"
         />
 
         {/* 深色叠加层：让文字清晰可读，保留图片质感 */}

@@ -60,7 +60,7 @@ export default function ProductCategoryGrid() {
                     alt={cat.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 22vw"
                   />
                   {/* 深色叠加保证文字可读 */}
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 via-transparent to-transparent" />

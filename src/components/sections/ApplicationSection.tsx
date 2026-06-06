@@ -83,7 +83,7 @@ export default function ApplicationSection() {
                 alt={app.name}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
               />
 
               {/* 暗色遮罩 */}

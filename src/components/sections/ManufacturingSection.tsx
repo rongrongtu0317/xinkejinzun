@@ -136,7 +136,7 @@ export default function ManufacturingSection() {
                     alt={activeItem.title}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="(max-width: 1024px) 90vw, 40vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
                   <div className="absolute bottom-5 left-5">
