@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
@@ -9,6 +9,10 @@ import { SplitTitle } from '@/components/ui/AnimatedText'
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+
+  // 仅在客户端启用入场动画，避免 SSR 阶段输出 opacity:0
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   // 视差：背景随滚动上移
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
@@ -59,7 +63,7 @@ export default function HeroSection() {
 
           {/* 小标签 */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={mounted ? { opacity: 0, y: 16 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex items-center gap-3 mb-8"
@@ -83,7 +87,7 @@ export default function HeroSection() {
 
           {/* 副标题 */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={mounted ? { opacity: 0, y: 20 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.75 }}
             className="text-warm-400 leading-relaxed mb-10 max-w-xl"
@@ -95,7 +99,7 @@ export default function HeroSection() {
 
           {/* 按钮组 */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={mounted ? { opacity: 0, y: 20 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
             className="flex flex-wrap gap-4"

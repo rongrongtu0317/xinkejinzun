@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ReactNode, CSSProperties } from 'react'
+import { ReactNode, CSSProperties, useEffect, useState } from 'react'
 
 interface AnimatedTextProps {
   children: ReactNode
@@ -74,12 +74,17 @@ export function SplitTitle({
   startDelay = 0,
   style,
 }: SplitTitleProps) {
+  // 关键修复：仅在客户端水合后启用动画
+  // 避免 SSR 输出 opacity:0 导致文字在 JS 未执行时不可见
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   return (
     <div className={className}>
       {lines.map((line, i) => (
         <div key={i} style={{ overflow: 'hidden' }}>
           <motion.div
-            initial={{ y: '100%', opacity: 0 }}
+            initial={mounted ? { y: '100%', opacity: 0 } : false}
             animate={{ y: '0%', opacity: 1 }}
             transition={{
               duration: 0.9,
