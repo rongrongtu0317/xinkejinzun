@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 
 const projectTypes = [
   '高端住宅 / 别墅',
@@ -49,16 +50,23 @@ export default function ContactForm() {
     setError(null)
 
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
+      // 静态导出环境：浏览器端直连 Supabase 写入
+      const supabase = createClient()
 
-      const data = await res.json()
+      const { error: dbError } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim() || null,
+          region: form.region.trim() || null,
+          project_type: form.projectType || null,
+          message: form.message.trim() || null,
+        })
 
-      if (!res.ok || !data.success) {
-        setError(data.error || '提交失败，请稍后重试')
+      if (dbError) {
+        console.error('提交失败:', dbError)
+        setError('提交失败，请稍后重试或通过电话联系我们')
         return
       }
 
