@@ -46,7 +46,7 @@ export default function AboutPage() {
                 我们是谁
               </h2>
               <p className="text-warm-600 text-sm leading-loose mb-5">
-                河北宇盛建材有限公司专注于彩石金属瓦及金属屋面系统产品的研发、生产与供应，
+                信科金尊专注于彩石金属瓦及金属屋面系统产品的研发、生产与供应，
                 围绕建筑屋面的安全性、耐久性、美观性与施工效率，
                 为客户提供稳定可靠的产品解决方案。
               </p>
@@ -65,7 +65,7 @@ export default function AboutPage() {
             <div className="relative h-80 lg:h-auto min-h-64 overflow-hidden">
               <Image
                 src="/images/about/factory.jpg"
-                alt="河北宇盛建材有限公司生产车间"
+                alt="信科金尊生产车间"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"

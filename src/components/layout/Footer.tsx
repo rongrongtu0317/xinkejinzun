@@ -32,11 +32,13 @@ export default function Footer() {
 
           {/* 品牌信息 */}
           <div className="lg:col-span-2">
-            {/* 品牌 Logo 占位 — 替换为真实 Logo */}
+            {/* 品牌 Logo */}
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-6 h-6 bg-gold-500 flex-shrink-0" />
+              <span className="flex items-center justify-center bg-white rounded-md p-0.5 flex-shrink-0">
+                <img src="/logo.png" alt="信科金尊" className="h-9 w-9 object-contain" />
+              </span>
               <span className="text-warm-100 font-light text-sm">
-                河北宇盛建材有限公司
+                信科金尊
               </span>
             </div>
 
@@ -45,23 +47,19 @@ export default function Footer() {
               为建筑屋面的安全性、耐久性与美观性提供专业解决方案。
             </p>
 
-            {/* 联系方式占位 — 替换为真实联系信息 */}
+            {/* 联系方式 */}
             <div className="space-y-3 text-sm">
-              <div className="flex items-start gap-3">
-                <span className="text-gold-600 mt-0.5">◎</span>
-                <span>【公司地址占位】— 请替换为真实地址</span>
+              <div className="flex items-center gap-3">
+                <span className="text-gold-600">◎</span>
+                <span>电话：19322277172</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gold-600">◎</span>
-                <span>【联系电话占位】— 请替换为真实电话</span>
+                <span>邮箱：rongrongtu0202@gmail.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gold-600">◎</span>
-                <span>【邮箱占位】— 请替换为真实邮箱</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-gold-600">◎</span>
-                <span>微信 / WhatsApp【占位】</span>
+                <span>WhatsApp / 微信：+86 19322277172</span>
               </div>
             </div>
           </div>
@@ -94,7 +92,7 @@ export default function Footer() {
       <div className="border-t border-charcoal-800">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-charcoal-300">
-            © {new Date().getFullYear()} 河北宇盛建材有限公司. 保留所有权利。
+            © {new Date().getFullYear()} 信科金尊. 保留所有权利。
           </p>
           <p className="text-xs text-charcoal-300">
             本网站内容仅供参考，产品参数以实际配置为准。

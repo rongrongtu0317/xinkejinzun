@@ -12,8 +12,8 @@ const contactItems = [
       </svg>
     ),
     label: '邮箱',
-    value: '【邮箱占位】',
-    note: '请替换为真实邮箱',
+    value: 'rongrongtu0202@gmail.com',
+    note: '',
   },
   {
     icon: (
@@ -22,8 +22,8 @@ const contactItems = [
       </svg>
     ),
     label: '联系电话',
-    value: '【电话占位】',
-    note: '请替换为真实电话',
+    value: '19322277172',
+    note: '',
   },
   {
     icon: (
@@ -33,8 +33,8 @@ const contactItems = [
       </svg>
     ),
     label: '公司地址',
-    value: '【地址占位】',
-    note: '请替换为真实地址',
+    value: '【公司地址待补充】',
+    note: '',
   },
   {
     icon: (
@@ -44,8 +44,8 @@ const contactItems = [
       </svg>
     ),
     label: '微信 / WhatsApp',
-    value: '【微信号占位】',
-    note: '请替换为真实账号',
+    value: '+86 19322277172',
+    note: 'WhatsApp / 微信同号',
   },
 ]
 

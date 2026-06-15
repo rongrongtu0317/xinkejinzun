@@ -45,13 +45,15 @@ export default function Header() {
 
             {/* 品牌名 — 替换为真实品牌 Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              {/* Logo 占位方块 — 替换为 <img src="/logo.svg" /> */}
-              <div className="w-7 h-7 bg-gold-500 flex-shrink-0" />
+              {/* 品牌 Logo */}
+              <span className="flex items-center justify-center bg-white rounded-md p-0.5 flex-shrink-0">
+                <img src="/logo.png" alt="信科金尊" className="h-9 w-9 object-contain" />
+              </span>
               <span
                 className="text-warm-100 font-light text-sm"
                 style={{ letterSpacing: '0.06em' }}
               >
-                河北宇盛建材有限公司
+                信科金尊
               </span>
             </Link>
 
