@@ -18,7 +18,7 @@ export default function AboutPage() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse 80% 60% at 30% 50%, rgba(196,163,90,0.06) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse 80% 60% at 30% 50%, rgba(58,164,94,0.06) 0%, transparent 60%)',
           }}
         />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">

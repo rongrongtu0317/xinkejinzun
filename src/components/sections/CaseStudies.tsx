@@ -21,7 +21,7 @@ export default function CaseStudies() {
     <section className="py-24 lg:py-32 bg-charcoal-900 relative overflow-hidden">
       <div
         className="absolute top-0 right-0 w-96 h-96 opacity-[0.03]"
-        style={{ background: 'radial-gradient(circle, #c4a35a 0%, transparent 70%)', filter: 'blur(40px)' }}
+        style={{ background: 'radial-gradient(circle, #3aa45e 0%, transparent 70%)', filter: 'blur(40px)' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">

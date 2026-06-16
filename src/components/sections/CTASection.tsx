@@ -18,7 +18,7 @@ export default function CTASection() {
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
-            'repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(196,163,90,0.5) 30px, rgba(196,163,90,0.5) 31px)',
+            'repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(58,164,94,0.5) 30px, rgba(58,164,94,0.5) 31px)',
         }}
       />
 

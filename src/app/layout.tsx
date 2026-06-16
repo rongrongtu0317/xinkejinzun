@@ -35,9 +35,6 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="h-full">
       <body className="min-h-full flex flex-col bg-charcoal-900 antialiased">
-        {/* 颗粒质感全局遮罩 — 提升高级感 */}
-        <div className="grain-overlay" aria-hidden="true" />
-
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

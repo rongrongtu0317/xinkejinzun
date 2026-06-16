@@ -9,7 +9,7 @@ const layers = [
     id: 1,
     name: '表层耐候保护层',
     desc: '抵御紫外线、雨水侵蚀，保持色彩长期稳定，延长产品使用寿命。',
-    color: 'rgba(196,163,90,0.9)',
+    color: 'rgba(58,164,94,0.9)',
     height: '28px',
   },
   {
@@ -100,7 +100,7 @@ export default function MaterialStructure() {
         className="absolute inset-0 opacity-[0.015]"
         style={{
           backgroundImage:
-            'repeating-linear-gradient(90deg, transparent, transparent 3px, #c4a35a 3px, #c4a35a 4px)',
+            'repeating-linear-gradient(90deg, transparent, transparent 3px, #3aa45e 3px, #3aa45e 4px)',
         }}
       />
 

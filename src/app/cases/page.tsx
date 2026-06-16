@@ -24,7 +24,7 @@ export default function CasesPage() {
         <div className="absolute inset-0 tile-pattern" />
         <div
           className="absolute bottom-0 right-0 w-80 h-80 opacity-[0.05]"
-          style={{ background: 'radial-gradient(circle, #c4a35a, transparent)', filter: 'blur(50px)' }}
+          style={{ background: 'radial-gradient(circle, #3aa45e, transparent)', filter: 'blur(50px)' }}
         />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

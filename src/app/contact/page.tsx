@@ -59,8 +59,8 @@ export default function ContactPage() {
           {/* 替换为真实地图组件，如 Google Maps、高德地图嵌入等 */}
           <div className="w-10 h-10 border border-gold-600 flex items-center justify-center mx-auto mb-4">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="8" r="3" stroke="#c4a35a" strokeWidth="1.2"/>
-              <path d="M10 2C6.7 2 4 4.7 4 8c0 4.5 6 10 6 10s6-5.5 6-10c0-3.3-2.7-6-6-6z" stroke="#c4a35a" strokeWidth="1.2"/>
+              <circle cx="10" cy="8" r="3" stroke="#3aa45e" strokeWidth="1.2"/>
+              <path d="M10 2C6.7 2 4 4.7 4 8c0 4.5 6 10 6 10s6-5.5 6-10c0-3.3-2.7-6-6-6z" stroke="#3aa45e" strokeWidth="1.2"/>
             </svg>
           </div>
           <p className="text-charcoal-300 text-sm">地图区域 — 替换为真实地图嵌入</p>

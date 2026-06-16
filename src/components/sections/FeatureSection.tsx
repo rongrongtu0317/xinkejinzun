@@ -10,7 +10,7 @@ const features = [
     desc: '镀铝锌钢板基材结合高温烧结彩砂，在保持足够强度的前提下显著降低屋面自重，适合新建与旧房翻新项目。',
     icon: (
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 3L6 18h7v15h10V18h7L18 3z" stroke="#c4a35a" strokeWidth="1.2" strokeLinejoin="round"/>
+        <path d="M18 3L6 18h7v15h10V18h7L18 3z" stroke="#3aa45e" strokeWidth="1.2" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -20,8 +20,8 @@ const features = [
     desc: '多层复合结构设计，基材镀铝锌处理，配合耐候保护层，适应多种气候环境，长期保持稳定的屋面表现。',
     icon: (
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="14" stroke="#c4a35a" strokeWidth="1.2"/>
-        <path d="M18 8v10l6 4" stroke="#c4a35a" strokeWidth="1.2" strokeLinecap="round"/>
+        <circle cx="18" cy="18" r="14" stroke="#3aa45e" strokeWidth="1.2"/>
+        <path d="M18 8v10l6 4" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -31,10 +31,10 @@ const features = [
     desc: '提供多种颜色与瓦型选择，支持定制颜色匹配，适应现代简约、欧式传统、文旅乡村等不同建筑风格。',
     icon: (
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="4" y="4" width="12" height="12" rx="1" stroke="#c4a35a" strokeWidth="1.2"/>
-        <rect x="20" y="4" width="12" height="12" rx="1" stroke="#c4a35a" strokeWidth="1.2" opacity="0.6"/>
-        <rect x="4" y="20" width="12" height="12" rx="1" stroke="#c4a35a" strokeWidth="1.2" opacity="0.4"/>
-        <rect x="20" y="20" width="12" height="12" rx="1" stroke="#c4a35a" strokeWidth="1.2" opacity="0.8"/>
+        <rect x="4" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2"/>
+        <rect x="20" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.6"/>
+        <rect x="4" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.4"/>
+        <rect x="20" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.8"/>
       </svg>
     ),
   },
@@ -44,7 +44,7 @@ const features = [
     desc: '模块化铺装设计，配件系统完整，包括脊瓦、檐口板、山墙板等，标准化安装流程提升施工效率。',
     icon: (
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M6 18h24M18 6l12 12-12 12" stroke="#c4a35a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6 18h24M18 6l12 12-12 12" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },

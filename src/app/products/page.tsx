@@ -45,7 +45,7 @@ export default function ProductsPage() {
         <div className="absolute inset-0 tile-pattern opacity-100" />
         <div
           className="absolute top-0 right-0 w-96 h-96 opacity-[0.06]"
-          style={{ background: 'radial-gradient(circle, #c4a35a, transparent)', filter: 'blur(60px)' }}
+          style={{ background: 'radial-gradient(circle, #3aa45e, transparent)', filter: 'blur(60px)' }}
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">

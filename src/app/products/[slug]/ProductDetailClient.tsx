@@ -11,7 +11,7 @@ const heroImages: Record<string, string> = {
   'libo-arc':        '/images/products/libo.jpg',
   'milan':           '/images/products/milan.jpg',
   'standard-basic':  '/images/products/standard.jpg',
-  'extended-custom': '/images/products/extended.jpg',
+  'extended-custom': '/彩石瓦金属瓦加长定制款.jpg',
   'accessories':     '/images/products/accessories.jpg',
 }
 

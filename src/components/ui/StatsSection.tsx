@@ -55,7 +55,7 @@ export default function StatsSection() {
         className="absolute inset-0 opacity-30"
         style={{
           backgroundImage:
-            'repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(196,163,90,0.04) 60px, rgba(196,163,90,0.04) 61px)',
+            'repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(58,164,94,0.04) 60px, rgba(58,164,94,0.04) 61px)',
         }}
       />
 

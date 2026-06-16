@@ -90,7 +90,7 @@ export default function ContactForm() {
       >
         <div className="w-12 h-12 border border-gold-500 flex items-center justify-center mx-auto mb-6">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 10l4 4 8-8" stroke="#c4a35a" strokeWidth="1.5"
+            <path d="M4 10l4 4 8-8" stroke="#3aa45e" strokeWidth="1.5"
               strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>

@@ -7,8 +7,8 @@ const contactItems = [
   {
     icon: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M3 3h12a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#c4a35a" strokeWidth="1.2"/>
-        <path d="M2 4l7 6 7-6" stroke="#c4a35a" strokeWidth="1.2" strokeLinecap="round"/>
+        <path d="M3 3h12a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#3aa45e" strokeWidth="1.2"/>
+        <path d="M2 4l7 6 7-6" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round"/>
       </svg>
     ),
     label: '邮箱',
@@ -18,7 +18,7 @@ const contactItems = [
   {
     icon: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M3.5 2h4l1.5 3.5-2 1.2c.8 1.8 2.2 3.2 4 4l1.2-2L16 10v4c0 .8-.7 1.4-1.5 1.3C5.2 14.3 2 8 2 3.5 2 2.7 2.7 2 3.5 2z" stroke="#c4a35a" strokeWidth="1.2" strokeLinejoin="round"/>
+        <path d="M3.5 2h4l1.5 3.5-2 1.2c.8 1.8 2.2 3.2 4 4l1.2-2L16 10v4c0 .8-.7 1.4-1.5 1.3C5.2 14.3 2 8 2 3.5 2 2.7 2.7 2 3.5 2z" stroke="#3aa45e" strokeWidth="1.2" strokeLinejoin="round"/>
       </svg>
     ),
     label: '联系电话',
@@ -28,8 +28,8 @@ const contactItems = [
   {
     icon: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <circle cx="9" cy="8" r="3" stroke="#c4a35a" strokeWidth="1.2"/>
-        <path d="M9 1C5.1 1 2 4.1 2 8c0 5.3 7 10 7 10s7-4.7 7-10c0-3.9-3.1-7-7-7z" stroke="#c4a35a" strokeWidth="1.2"/>
+        <circle cx="9" cy="8" r="3" stroke="#3aa45e" strokeWidth="1.2"/>
+        <path d="M9 1C5.1 1 2 4.1 2 8c0 5.3 7 10 7 10s7-4.7 7-10c0-3.9-3.1-7-7-7z" stroke="#3aa45e" strokeWidth="1.2"/>
       </svg>
     ),
     label: '公司地址',
@@ -39,8 +39,8 @@ const contactItems = [
   {
     icon: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <rect x="2" y="2" width="14" height="14" rx="2" stroke="#c4a35a" strokeWidth="1.2"/>
-        <path d="M6 6h2v2H6zM10 6h2v2h-2zM6 10h2v2H6zM10 10h2v2h-2z" fill="#c4a35a" opacity="0.6"/>
+        <rect x="2" y="2" width="14" height="14" rx="2" stroke="#3aa45e" strokeWidth="1.2"/>
+        <path d="M6 6h2v2H6zM10 6h2v2h-2zM6 10h2v2H6zM10 10h2v2h-2z" fill="#3aa45e" opacity="0.6"/>
       </svg>
     ),
     label: '微信 / WhatsApp',
