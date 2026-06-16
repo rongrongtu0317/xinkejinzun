@@ -148,8 +148,9 @@ body {
    章节标签（上方小文字）
    =================================================== */
 .section-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #3aa45e;
 }
