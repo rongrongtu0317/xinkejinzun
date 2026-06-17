@@ -48,7 +48,7 @@ export const translations = {
       quote: 'Get a Quote',
     },
   },
-} as const
+}
 
 export type Lang = keyof typeof translations
 export type Dict = (typeof translations)['zh']
