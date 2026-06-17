@@ -4,21 +4,23 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
 const navItems = [
-  { href: '/',               label: '首页' },
-  { href: '/products',       label: '产品中心' },
-  { href: '/color-schemes',  label: '屋面配色' },
-  { href: '/cases',          label: '工程案例' },
-  { href: '/installation',   label: '技术支持' },
-  { href: '/about',          label: '关于我们' },
-  { href: '/contact',        label: '联系我们' },
-]
+  { href: '/',               key: 'home' },
+  { href: '/products',       key: 'products' },
+  { href: '/color-schemes',  key: 'colors' },
+  { href: '/cases',          key: 'cases' },
+  { href: '/installation',   key: 'support' },
+  { href: '/about',          key: 'about' },
+  { href: '/contact',        key: 'contact' },
+] as const
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { lang, setLang, t } = useLanguage()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -69,7 +71,7 @@ export default function Header() {
                       : 'text-warm-300 hover:text-warm-100'
                   }`}
                 >
-                  {item.label}
+                  {t.nav[item.key]}
                   {/* 悬停底线 */}
                   <span
                     className={`absolute -bottom-1 left-0 h-px bg-gold-500 transition-all duration-300 ${
@@ -82,11 +84,30 @@ export default function Header() {
 
             {/* 右侧按钮 + 汉堡 */}
             <div className="flex items-center gap-4">
+              {/* 语言切换 CN / EN */}
+              <div className="flex items-center gap-1.5 text-xs tracking-wider">
+                <button
+                  onClick={() => setLang('zh')}
+                  className={`transition-colors ${lang === 'zh' ? 'text-gold-500 font-semibold' : 'text-warm-300 hover:text-warm-100'}`}
+                  aria-label="切换到中文"
+                >
+                  CN
+                </button>
+                <span className="text-charcoal-500">/</span>
+                <button
+                  onClick={() => setLang('en')}
+                  className={`transition-colors ${lang === 'en' ? 'text-gold-500 font-semibold' : 'text-warm-300 hover:text-warm-100'}`}
+                  aria-label="Switch to English"
+                >
+                  EN
+                </button>
+              </div>
+
               <Link
                 href="/contact"
                 className="hidden lg:inline-flex items-center gap-2 btn-outline text-xs"
               >
-                获取报价
+                {t.cta.quote}
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -141,7 +162,7 @@ export default function Header() {
                       pathname === item.href ? 'text-gold-500' : 'text-warm-200'
                     }`}
                   >
-                    {item.label}
+                    {t.nav[item.key]}
                   </Link>
                   <div className="w-full h-px bg-charcoal-600 mt-4" />
                 </motion.div>
@@ -151,7 +172,7 @@ export default function Header() {
                 href="/contact"
                 className="btn-gold inline-flex w-fit mt-4 text-sm"
               >
-                获取报价
+                {t.cta.quote}
               </Link>
             </nav>
           </motion.div>

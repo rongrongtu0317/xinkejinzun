@@ -5,9 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { SplitTitle } from '@/components/ui/AnimatedText'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null)
+  const { t } = useLanguage()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
 
   // 仅在客户端启用入场动画，避免 SSR 阶段输出 opacity:0
@@ -69,12 +71,12 @@ export default function HeroSection() {
             className="flex items-center gap-3 mb-8"
           >
             <div className="w-8 h-px bg-gold-500" />
-            <span className="section-label">彩石金属瓦 · 金属屋面系统</span>
+            <span className="section-label">{t.hero.label}</span>
           </motion.div>
 
           {/* 主标题 — 逐行展开，内联样式确保响应式字号生效 */}
           <SplitTitle
-            lines={['让建筑屋面', '拥有更长久的质感']}
+            lines={[t.hero.titleLine1, t.hero.titleLine2]}
             className="mb-8"
             lineClassName="font-light text-warm-50"
             startDelay={0.35}
@@ -93,8 +95,7 @@ export default function HeroSection() {
             className="text-warm-400 leading-relaxed mb-10 max-w-xl"
             style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}
           >
-            专注彩石金属瓦与金属屋面系统，为住宅、别墅、商业建筑
-            和工程项目提供美观、耐候、轻质、高强的屋面解决方案。
+            {t.hero.subtitle}
           </motion.p>
 
           {/* 按钮组 */}
@@ -105,13 +106,13 @@ export default function HeroSection() {
             className="flex flex-wrap gap-4"
           >
             <Link href="/products" className="btn-gold text-sm font-medium">
-              探索产品
+              {t.hero.explore}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-1">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </Link>
             <Link href="/contact" className="btn-outline text-sm">
-              获取报价
+              {t.hero.quote}
             </Link>
           </motion.div>
 
