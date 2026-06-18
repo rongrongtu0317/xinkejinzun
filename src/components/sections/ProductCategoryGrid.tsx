@@ -9,7 +9,7 @@ import SectionTitle from '@/components/ui/SectionTitle'
 // 每个分类对应真实产品图片
 const categoryImages: Record<string, string> = {
   standard:      '/images/products/standard.jpg',
-  extended:      '/彩石瓦金属瓦加长定制款.jpg',
+  extended:      '/images/products/extended.jpg',
   accessories:   '/images/products/accessories.jpg',
   'color-plans': '/images/products/standard.jpg',
   libo:          '/images/products/libo.jpg',
