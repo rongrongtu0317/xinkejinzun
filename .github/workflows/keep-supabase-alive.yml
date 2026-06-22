@@ -1,0 +1,33 @@
+name: Keep Supabase Alive
+
+# 定时 ping Supabase REST 接口，把项目“焐热”，避免免费项目闲置约 7 天后自动暂停
+# （一旦暂停，联系表单会报“网络异常/提交失败”）。
+# 每 2 天自动跑一次；也可在 GitHub 仓库 Actions 页手动触发（Run workflow）。
+
+on:
+  schedule:
+    - cron: '0 7 */2 * *'   # 每隔一天 07:00 UTC（≈ 北京时间 15:00）
+  workflow_dispatch:         # 允许手动触发，方便随时测试
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        run: |
+          URL="https://dfdqxhpevudegrnrsjpx.supabase.co"
+          # 这是 publishable（公开）密钥，本就编译进前端、对外可见，放此处不算泄露。
+          # 若想更规范，可改为仓库 Secret：把下行换成  KEY="${{ secrets.SUPABASE_KEY }}"
+          KEY="sb_publishable_qdGsWnb3sWvKzZ54ICQtTw_43ISghB_"
+
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            "$URL/rest/v1/contact_submissions?select=id&limit=1" \
+            -H "apikey: $KEY" \
+            -H "Authorization: Bearer $KEY")
+
+          echo "Supabase 返回 HTTP $code"
+          if [ "$code" = "000" ] || [ "$code" -ge 500 ]; then
+            echo "::error::Supabase 不可达（HTTP $code）——项目可能已暂停，请登录 supabase.com 恢复。"
+            exit 1
+          fi
+          echo "✅ Supabase 处于活跃状态，保活成功。"
