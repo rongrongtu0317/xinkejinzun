@@ -1,29 +1,44 @@
-import Link from 'next/link'
+'use client'
 
-const footerLinks = {
-  产品: [
-    { href: '/products?category=standard',    label: '彩石金属瓦常规款' },
-    { href: '/products?category=extended',    label: '加长定制款' },
-    { href: '/products?category=libo',        label: '丽波圆弧型' },
-    { href: '/products?category=milan',       label: '米兰型' },
-    { href: '/products?category=rainbow',     label: '彩虹罗马型' },
-    { href: '/products?category=accessories', label: '配件系统' },
-  ],
-  解决方案: [
-    { href: '/color-schemes',   label: '屋面配色方案' },
-    { href: '/installation',    label: '安装与技术支持' },
-    { href: '/cases',           label: '工程案例' },
-    { href: '/contact',         label: '项目报价' },
-  ],
-  公司: [
-    { href: '/about',           label: '关于我们' },
-    { href: '/about#capability',label: '制造能力' },
-    { href: '/about#quality',   label: '研发与质检' },
-    { href: '/contact',         label: '联系我们' },
-  ],
-}
+import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
 export default function Footer() {
+  const { t } = useLanguage()
+  const L = t.footer.links
+
+  const footerGroups = [
+    {
+      title: t.footer.groupProducts,
+      links: [
+        { href: '/products?category=standard',    label: L.standard },
+        { href: '/products?category=extended',    label: L.extended },
+        { href: '/products?category=libo',        label: L.libo },
+        { href: '/products?category=milan',       label: L.milan },
+        { href: '/products?category=rainbow',     label: L.rainbow },
+        { href: '/products?category=accessories', label: L.accessories },
+      ],
+    },
+    {
+      title: t.footer.groupSolutions,
+      links: [
+        { href: '/color-schemes', label: L.colorSchemes },
+        { href: '/installation',  label: L.installation },
+        { href: '/cases',         label: L.cases },
+        { href: '/contact',       label: L.quote },
+      ],
+    },
+    {
+      title: t.footer.groupCompany,
+      links: [
+        { href: '/about',            label: L.about },
+        { href: '/about#capability', label: L.capability },
+        { href: '/about#quality',    label: L.quality },
+        { href: '/contact',          label: L.contact },
+      ],
+    },
+  ]
+
   return (
     <footer className="bg-charcoal-950 text-warm-400 border-t border-charcoal-700">
       {/* 主内容区 */}
@@ -43,36 +58,35 @@ export default function Footer() {
             </div>
 
             <p className="text-sm leading-relaxed mb-8 max-w-sm text-warm-500">
-              专注彩石金属瓦及金属屋面系统产品的研发、生产与供应，
-              为建筑屋面的安全性、耐久性与美观性提供专业解决方案。
+              {t.footer.brandDesc}
             </p>
 
             {/* 联系方式 */}
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3">
                 <span className="text-gold-600">◎</span>
-                <span>电话：19322277172</span>
+                <span>{t.footer.phone}：19322277172</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gold-600">◎</span>
-                <span>邮箱：rongrongtu0202@gmail.com</span>
+                <span>{t.footer.email}：rongrongtu0202@gmail.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gold-600">◎</span>
-                <span>WhatsApp / 微信：+86 19322277172</span>
+                <span>{t.footer.whatsapp}：+86 19322277172</span>
               </div>
             </div>
           </div>
 
           {/* 链接组 */}
-          {Object.entries(footerLinks).map(([group, links]) => (
-            <div key={group}>
+          {footerGroups.map((group) => (
+            <div key={group.title}>
               <h4 className="text-warm-100 text-xs tracking-widest uppercase mb-5 font-medium">
-                {group}
+                {group.title}
               </h4>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.href}>
+                {group.links.map((link) => (
+                  <li key={link.href + link.label}>
                     <Link
                       href={link.href}
                       className="text-sm text-warm-500 hover:text-warm-200 transition-colors duration-200"
@@ -92,10 +106,10 @@ export default function Footer() {
       <div className="border-t border-charcoal-800">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-charcoal-300">
-            © {new Date().getFullYear()} 信科金尊. 保留所有权利。
+            © {new Date().getFullYear()} 信科金尊. {t.footer.copyright}
           </p>
           <p className="text-xs text-charcoal-300">
-            本网站内容仅供参考，产品参数以实际配置为准。
+            {t.footer.disclaimer}
           </p>
         </div>
       </div>

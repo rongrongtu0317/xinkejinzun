@@ -2,18 +2,21 @@
 
 import { motion } from 'framer-motion'
 import type { ProductSpec } from '@/data/products'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import { pick } from '@/lib/i18n/translations'
 
 interface ProductSpecsTableProps {
   specs: ProductSpec[]
 }
 
 export default function ProductSpecsTable({ specs }: ProductSpecsTableProps) {
+  const { t, lang } = useLanguage()
   return (
     <div>
       <div className="divide-y divide-charcoal-700">
         {specs.map((spec, i) => (
           <motion.div
-            key={spec.label}
+            key={i}
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -21,10 +24,10 @@ export default function ProductSpecsTable({ specs }: ProductSpecsTableProps) {
             className="spec-row flex items-start gap-4"
           >
             <span className="text-charcoal-200 text-sm w-28 flex-shrink-0 pt-0.5">
-              {spec.label}
+              {pick(spec.label, lang)}
             </span>
             <span className="text-warm-200 text-sm leading-relaxed">
-              {spec.value}
+              {pick(spec.value, lang)}
             </span>
           </motion.div>
         ))}
@@ -37,8 +40,7 @@ export default function ProductSpecsTable({ specs }: ProductSpecsTableProps) {
         transition={{ delay: 0.5, duration: 0.5 }}
         className="text-charcoal-300 text-xs mt-6 pt-5 border-t border-charcoal-700 leading-relaxed"
       >
-        ※ 以上参数为参考值，具体以实际产品配置和项目需求为准。
-        如需定制规格或了解详细技术参数，请联系我们获取支持。
+        {t.productDetail.specsNote}
       </motion.p>
     </div>
   )

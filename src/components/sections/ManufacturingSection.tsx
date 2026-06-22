@@ -4,60 +4,29 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
-const items = [
-  {
-    id: 'production',
-    title: '生产制造',
-    label: '01',
-    desc: '多条现代化自动化生产线，覆盖基材处理、彩砂覆层、成型加工全流程，稳定保障产品品质与产能。',
-    detail: '从镀铝锌钢板的基材处理，到高温烧结彩砂覆层，再到成型切割，全程工艺控制，保证每批次产品的一致性与稳定性。',
-    image: '/images/mfg/production.jpg',
-  },
-  {
-    id: 'rd',
-    title: '产品研发',
-    label: '02',
-    desc: '持续投入产品研发，针对不同气候环境、屋面结构与建筑风格，开发适配的瓦型与配套系统方案。',
-    detail: '产品研发围绕屋面性能、美观表达与施工效率三个维度展开，不断优化结构设计与表面工艺。',
-    image: '/images/mfg/tiles.jpg',
-  },
-  {
-    id: 'color',
-    title: '颜色定制',
-    label: '03',
-    desc: '支持客户根据项目需求定制颜色，提供专业选色建议与样品确认服务，确保最终颜色与设计预期一致。',
-    detail: '色卡样品可提前确认，量产前进行颜色一致性检验，避免批次色差。颜色选型建议可结合建筑设计图提供。',
-    image: '/images/mfg/tiles.jpg',
-  },
-  {
-    id: 'quality',
-    title: '质量检测',
-    label: '04',
-    desc: '建立覆盖原料进场、生产过程、成品出厂的多环节质量检测体系，对关键性能指标进行严格把控。',
-    detail: '检测项目涵盖基材厚度、彩砂附着力、耐候性、防腐性等核心指标，保障出厂产品符合质量标准。',
-    image: '/images/mfg/press.jpg',
-  },
-  {
-    id: 'accessories',
-    title: '配件配套',
-    label: '05',
-    desc: '配件体系与主瓦同步设计，包括脊瓦、檐口板、山墙板、泛水板、固定件等，实现屋面系统的完整性。',
-    detail: '配件规格与主瓦型号严格匹配，材质工艺一致，保证屋面系统整体的外观协调与防水性能。',
-    image: '/images/mfg/stamping.jpg',
-  },
-  {
-    id: 'service',
-    title: '技术服务',
-    label: '06',
-    desc: '提供产品选型建议、颜色方案推荐、技术参数说明、安装指导和售后支持，全程陪伴项目落地。',
-    detail: '服务覆盖项目前期选型、施工阶段指导和交付后支持，确保屋面系统从产品到施工的整体质量。',
-    image: '/images/mfg/line2.jpg',
-  },
+// id / 编号 / 配图（结构性，与语言无关）；文案从语言包按序号取
+const mfgMeta = [
+  { id: 'production',  label: '01', image: '/images/mfg/production.jpg' },
+  { id: 'rd',          label: '02', image: '/images/mfg/rd.jpg' },
+  { id: 'color',       label: '03', image: '/images/mfg/color.jpg' },
+  { id: 'quality',     label: '04', image: '/images/mfg/quality.jpg' },
+  { id: 'accessories', label: '05', image: '/images/mfg/accessories.jpg' },
+  { id: 'service',     label: '06', image: '/images/mfg/service.jpg' },
 ]
 
 export default function ManufacturingSection() {
-  const [active, setActive] = useState(items[0].id)
+  const { t } = useLanguage()
+  const items = t.manufacturing.items.map((item, i) => ({
+    id: mfgMeta[i].id,
+    label: mfgMeta[i].label,
+    image: mfgMeta[i].image,
+    title: item.title,
+    desc: item.desc,
+    detail: item.detail,
+  }))
+  const [active, setActive] = useState(mfgMeta[0].id)
   const activeItem = items.find((it) => it.id === active)!
 
   return (
@@ -65,8 +34,8 @@ export default function ManufacturingSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="mb-16">
           <SectionTitle
-            label="制造实力"
-            title="从生产到交付，<br/>建立稳定的产品体系"
+            label={t.manufacturing.label}
+            title={t.manufacturing.title}
           />
         </div>
 

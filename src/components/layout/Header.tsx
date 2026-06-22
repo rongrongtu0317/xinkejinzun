@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const navItems = [
   { href: '/',               key: 'home' },
@@ -20,7 +21,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
-  const { lang, setLang, t } = useLanguage()
+  const { t } = useLanguage()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -84,24 +85,8 @@ export default function Header() {
 
             {/* 右侧按钮 + 汉堡 */}
             <div className="flex items-center gap-4">
-              {/* 语言切换 CN / EN */}
-              <div className="flex items-center gap-1.5 text-xs tracking-wider">
-                <button
-                  onClick={() => setLang('zh')}
-                  className={`transition-colors ${lang === 'zh' ? 'text-gold-500 font-semibold' : 'text-warm-300 hover:text-warm-100'}`}
-                  aria-label="切换到中文"
-                >
-                  CN
-                </button>
-                <span className="text-charcoal-500">/</span>
-                <button
-                  onClick={() => setLang('en')}
-                  className={`transition-colors ${lang === 'en' ? 'text-gold-500 font-semibold' : 'text-warm-300 hover:text-warm-100'}`}
-                  aria-label="Switch to English"
-                >
-                  EN
-                </button>
-              </div>
+              {/* 语言切换 — 仿 XCMG 全屏面板 */}
+              <LanguageSwitcher />
 
               <Link
                 href="/contact"

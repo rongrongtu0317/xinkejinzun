@@ -1,18 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { colorOptions, colorSchemes } from '@/data/colors'
 import SectionTitle from '@/components/ui/SectionTitle'
 import CTASection from '@/components/sections/CTASection'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import { pick } from '@/lib/i18n/translations'
 
 export default function ColorSchemesPage() {
+  const { t, lang } = useLanguage()
   const [activeScheme, setActiveScheme] = useState(colorSchemes[0].id)
   const [activeColor, setActiveColor] = useState(colorOptions[0].id)
 
   const currentScheme = colorSchemes.find((s) => s.id === activeScheme)!
-  const currentColor = colorOptions.find((c) => c.id === activeColor)!
 
   return (
     <div className="pt-20 bg-charcoal-900 min-h-screen">
@@ -22,9 +25,9 @@ export default function ColorSchemesPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
             <SectionTitle
-              label="屋面配色"
-              title="屋面配色方案"
-              subtitle="根据建筑风格、墙面颜色与项目环境，为屋面选择更协调的色彩表达。提供多种颜色与配色方案参考。"
+              label={t.colorSchemesPage.label}
+              title={t.colorSchemesPage.title}
+              subtitle={t.colorSchemesPage.subtitle}
             />
           </motion.div>
         </div>
@@ -34,7 +37,7 @@ export default function ColorSchemesPage() {
       <section className="py-16 bg-charcoal-900">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="mb-8">
-            <span className="section-label">按建筑风格</span>
+            <span className="section-label">{t.colorSchemesPage.byStyleLabel}</span>
             <div className="w-10 h-px bg-gold-500 my-3 opacity-70" />
           </div>
 
@@ -50,10 +53,10 @@ export default function ColorSchemesPage() {
                 }`}
               >
                 <span className={`text-xs tracking-wider block mb-1 ${activeScheme === scheme.id ? 'text-gold-500' : 'text-charcoal-300'}`}>
-                  {scheme.style}
+                  {pick(scheme.style, lang)}
                 </span>
                 <span className={`text-sm font-light ${activeScheme === scheme.id ? 'text-warm-100' : 'text-warm-400'}`}>
-                  {scheme.name}
+                  {pick(scheme.name, lang)}
                 </span>
               </button>
             ))}
@@ -69,43 +72,30 @@ export default function ColorSchemesPage() {
               transition={{ duration: 0.4 }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"
             >
-              {/* 效果图占位 */}
-              <div
-                className="relative h-72 lg:h-96 overflow-hidden"
-                style={{
-                  background: `linear-gradient(145deg, ${
-                    colorOptions.find((c) => c.id === currentScheme.colors[0])?.secondaryHex ?? '#333'
-                  } 0%, ${
-                    colorOptions.find((c) => c.id === currentScheme.colors[0])?.hex ?? '#555'
-                  } 100%)`,
-                }}
-              >
-                {/* 瓦片纹理 */}
-                <svg className="absolute inset-0 w-full h-full opacity-[0.12]" preserveAspectRatio="xMidYMid slice">
-                  <defs>
-                    <pattern id="cs-tile" x="0" y="0" width="80" height="48" patternUnits="userSpaceOnUse">
-                      <path d="M0 48 L40 0 L80 48 Z" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.8"/>
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#cs-tile)" />
-                </svg>
+              {/* 配色方案效果图（在 src/data/colors.ts 的 image 字段维护，每个方案一张独立图） */}
+              <div className="relative h-72 lg:h-96 overflow-hidden bg-charcoal-700">
+                <Image
+                  src={currentScheme.image}
+                  alt={pick(currentScheme.name, lang)}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 90vw, 50vw"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
                 <div className="absolute bottom-6 left-6">
-                  <p className="text-white/40 text-[10px] tracking-widest uppercase mb-1">配色方案</p>
-                  <p className="text-white text-xl font-light">{currentScheme.name}</p>
+                  <p className="text-white/40 text-[10px] tracking-widest uppercase mb-1">{t.colorSchemesPage.schemeLabel}</p>
+                  <p className="text-white text-xl font-light">{pick(currentScheme.name, lang)}</p>
                 </div>
-                {/* 图片替换提示 */}
-                <div className="absolute top-4 right-4 text-[10px] text-white/20">替换为真实屋面效果图</div>
               </div>
 
               {/* 方案说明 */}
               <div>
-                <h2 className="text-warm-100 font-light text-2xl mb-4">{currentScheme.name}</h2>
-                <p className="text-warm-400 text-sm leading-relaxed mb-8">{currentScheme.description}</p>
+                <h2 className="text-warm-100 font-light text-2xl mb-4">{pick(currentScheme.name, lang)}</h2>
+                <p className="text-warm-400 text-sm leading-relaxed mb-8">{pick(currentScheme.description, lang)}</p>
 
                 {/* 推荐颜色 */}
                 <div className="mb-8">
-                  <p className="text-[10px] text-charcoal-300 tracking-widest uppercase mb-4">推荐颜色</p>
+                  <p className="text-[10px] text-charcoal-300 tracking-widest uppercase mb-4">{t.colorSchemesPage.recommendedColors}</p>
                   <div className="flex gap-3">
                     {currentScheme.colors.map((cId) => {
                       const c = colorOptions.find((co) => co.id === cId)!
@@ -115,7 +105,7 @@ export default function ColorSchemesPage() {
                             className="w-12 h-12 rounded-sm"
                             style={{ backgroundColor: c.hex }}
                           />
-                          <span className="text-[10px] text-charcoal-200">{c.name}</span>
+                          <span className="text-[10px] text-charcoal-200">{pick(c.name, lang)}</span>
                         </div>
                       )
                     })}
@@ -123,7 +113,7 @@ export default function ColorSchemesPage() {
                 </div>
 
                 <Link href="/contact" className="btn-gold text-sm inline-flex">
-                  获取该方案报价
+                  {t.colorSchemesPage.getSchemeQuote}
                 </Link>
               </div>
             </motion.div>
@@ -135,9 +125,9 @@ export default function ColorSchemesPage() {
       <section className="py-20 bg-charcoal-800">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="mb-12">
-            <span className="section-label">全部颜色</span>
+            <span className="section-label">{t.colorSchemesPage.allColorsLabel}</span>
             <div className="w-10 h-px bg-gold-500 my-4 opacity-70" />
-            <h2 className="text-warm-100 font-light text-2xl">选择适合您项目的颜色</h2>
+            <h2 className="text-warm-100 font-light text-2xl">{t.colorSchemesPage.allColorsTitle}</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-charcoal-700">
@@ -175,17 +165,16 @@ export default function ColorSchemesPage() {
 
                 {/* 颜色信息 */}
                 <div className="p-4 bg-charcoal-800 group-hover:bg-charcoal-700 transition-colors duration-300">
-                  <h3 className="text-warm-200 text-sm font-medium mb-1">{color.name}</h3>
-                  <p className="text-charcoal-200 text-xs line-clamp-2 leading-relaxed">{color.description}</p>
-                  <p className="text-charcoal-300 text-[10px] mt-2">{color.buildingStyle}</p>
+                  <h3 className="text-warm-200 text-sm font-medium mb-1">{pick(color.name, lang)}</h3>
+                  <p className="text-charcoal-200 text-xs line-clamp-2 leading-relaxed">{pick(color.description, lang)}</p>
+                  <p className="text-charcoal-300 text-[10px] mt-2">{pick(color.buildingStyle, lang)}</p>
                 </div>
               </motion.button>
             ))}
           </div>
 
           <p className="text-charcoal-300 text-xs mt-8 leading-relaxed">
-            * 屏幕显示颜色与实际产品存在差异，请以实物样品为准。
-            支持颜色定制，如有特殊颜色需求请联系我们进行确认。
+            {t.colorSchemesPage.bottomNote}
           </p>
         </div>
       </section>

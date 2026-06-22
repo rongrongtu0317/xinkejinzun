@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "node server.js",
+    "lint": "eslint",
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "optimize-images:inplace": "node scripts/optimize-images.mjs --inplace"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

@@ -5,18 +5,14 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { cases } from '@/data/cases'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import { pick } from '@/lib/i18n/translations'
 
 // 首页只展示前 3 个案例
 const featuredCases = cases.slice(0, 3)
 
-// 每个案例对应一张真实屋面效果图
-const caseImages = [
-  '/images/cases/case1.jpg',
-  '/images/cases/case2.jpg',
-  '/images/cases/case3.jpg',
-]
-
 export default function CaseStudies() {
+  const { t, lang } = useLanguage()
   return (
     <section className="py-24 lg:py-32 bg-charcoal-900 relative overflow-hidden">
       <div
@@ -28,12 +24,12 @@ export default function CaseStudies() {
         {/* 标题行 */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
           <SectionTitle
-            label="工程案例"
-            title="真实项目，<br/>验证屋面系统表现"
-            subtitle="来自住宅、商业、公共及海外工程的实际应用，用项目结果说明产品性能。"
+            label={t.caseStudies.label}
+            title={t.caseStudies.title}
+            subtitle={t.caseStudies.subtitle}
           />
           <Link href="/cases" className="btn-outline text-xs whitespace-nowrap self-end">
-            查看全部案例
+            {t.caseStudies.viewAll}
           </Link>
         </div>
 
@@ -52,8 +48,8 @@ export default function CaseStudies() {
                 {/* 真实案例图片 */}
                 <div className="relative h-60 bg-charcoal-700 overflow-hidden">
                   <Image
-                    src={caseImages[i]}
-                    alt={c.name}
+                    src={c.coverImage}
+                    alt={pick(c.name, lang)}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 1024px) 90vw, 30vw"
@@ -63,7 +59,7 @@ export default function CaseStudies() {
                   {/* 建筑类型标签 */}
                   <div className="absolute top-4 left-4 z-10">
                     <span className="text-[10px] text-white/70 border border-white/20 bg-black/30 px-2.5 py-1 tracking-wider backdrop-blur-sm">
-                      {c.type}
+                      {pick(c.type, lang)}
                     </span>
                   </div>
                   <div className="absolute top-4 right-4 z-10">
@@ -75,9 +71,9 @@ export default function CaseStudies() {
                 <div className="bg-charcoal-800 p-6 group-hover:bg-charcoal-700 transition-colors duration-300">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <p className="text-[10px] text-gold-600 tracking-widest uppercase mb-1">{c.location}</p>
+                      <p className="text-[10px] text-gold-600 tracking-widest uppercase mb-1">{pick(c.location, lang)}</p>
                       <h3 className="text-warm-100 font-light leading-snug text-base group-hover:text-gold-400 transition-colors duration-300">
-                        {c.name}
+                        {pick(c.name, lang)}
                       </h3>
                     </div>
                     <span className="text-charcoal-300 text-xs flex-shrink-0 ml-4 mt-1 group-hover:text-gold-500 transition-colors duration-300">→</span>
@@ -85,21 +81,21 @@ export default function CaseStudies() {
 
                   <div className="flex flex-col gap-1.5 mb-4">
                     <div className="flex justify-between text-xs">
-                      <span className="text-charcoal-300">使用产品</span>
-                      <span className="text-warm-300 text-right max-w-[180px] leading-tight">{c.product}</span>
+                      <span className="text-charcoal-300">{t.caseStudies.productLabel}</span>
+                      <span className="text-warm-300 text-right max-w-[180px] leading-tight">{pick(c.product, lang)}</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-charcoal-300">项目面积</span>
-                      <span className="text-warm-300">{c.area}</span>
+                      <span className="text-charcoal-300">{t.caseStudies.areaLabel}</span>
+                      <span className="text-warm-300">{pick(c.area, lang)}</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-charcoal-300">颜色方案</span>
-                      <span className="text-warm-300">{c.color}</span>
+                      <span className="text-charcoal-300">{t.caseStudies.colorLabel}</span>
+                      <span className="text-warm-300">{pick(c.color, lang)}</span>
                     </div>
                   </div>
 
                   <p className="text-charcoal-200 text-xs leading-relaxed border-t border-charcoal-700 pt-4">
-                    {c.highlights[0]}
+                    {pick(c.highlights, lang)[0]}
                   </p>
                 </div>
               </Link>

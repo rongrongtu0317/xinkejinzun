@@ -1,0 +1,42 @@
+图片原图投放区（自动优化用）
+================================
+
+【怎么用】
+1. 把你的原图（手机拍的大图、几 MB 都没关系）放进这个 images-src 文件夹，
+   子目录结构和文件名要和 public/images 里一模一样。例如要替换：
+
+     public/images/cases/renovation-chengdu-cover.jpg
+   就放：
+     images-src/cases/renovation-chengdu-cover.jpg
+
+   （PNG/WEBP 也行，会自动转成 JPG；文件名后缀写什么都行，输出统一是 .jpg）
+
+2. 在 stoneapp 目录下运行：
+     npm run optimize-images
+
+3. 脚本会自动：按 EXIF 转正 → 缩放到该位置的推荐尺寸 → 压缩 → 覆盖输出到
+   public/images/ 对应位置。终端会打印每张图“压缩前 → 压缩后”的体积。
+
+4. 然后照常构建上传：npx next build，把 out/ 传到 Hostinger。
+
+【各位置自动套用的尺寸】
+  根目录 hero-bg.jpg ............ 最大宽 1920px
+  products/*-hero.jpg（详情大图）. 最大宽 1600px
+  products/其它（列表卡片）...... 最大宽 900px
+  categories/ ................... 最大宽 900px
+  app/ .......................... 最大宽 1000px
+  mfg/ .......................... 最大宽 1200px
+  cases/ ........................ 最大宽 1600px
+  colors/ ....................... 最大宽 1200px
+  about/ ........................ 最大宽 1200px
+  （都只缩小、不放大；质量 80~82，肉眼几乎无差别）
+
+【想一次性压缩 public/images 里现有的图】
+  运行：npm run optimize-images:inplace
+  （会就地覆盖现有图片，把之前没压缩的大图也压小，一次性清理用）
+
+【HEIC（苹果手机照片）】
+  可能不被支持。请先在手机/电脑上转成 JPG 再放进来。
+
+【完整的“哪张图对应哪个位置”清单】
+  见 stoneapp/图片替换清单.md

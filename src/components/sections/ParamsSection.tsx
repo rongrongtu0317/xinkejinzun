@@ -2,19 +2,11 @@
 
 import { motion } from 'framer-motion'
 import SectionTitle from '@/components/ui/SectionTitle'
-
-const params = [
-  { label: '产品尺寸',   value: '1340 × 420',  unit: 'mm' },
-  { label: '常规厚度',   value: '0.4',          unit: 'mm' },
-  { label: '单片重量',   value: '约 2.8',       unit: 'kg / 片' },
-  { label: '每平方用量', value: '约 2.08',      unit: '片 / ㎡' },
-  { label: '基材',       value: '镀铝锌钢板',   unit: '' },
-  { label: '表面工艺',   value: '高温烧结彩砂', unit: '' },
-  { label: '颜色',       value: '支持定制',     unit: '' },
-  { label: '配套系统',   value: '主瓦 + 配件',  unit: '全系配套' },
-]
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
 export default function ParamsSection() {
+  const { t } = useLanguage()
+  const params = t.params.items
   return (
     <section className="py-20 lg:py-28 bg-warm-100 relative overflow-hidden">
       {/* 背景纹理 */}
@@ -32,9 +24,9 @@ export default function ParamsSection() {
           {/* 左侧标题 */}
           <div>
             <SectionTitle
-              label="产品参数"
-              title="关键参数，<br/>一眼了解产品基础"
-              subtitle="以下参数为常规产品参考值，特殊规格可定制，具体以实际产品配置和项目需求为准。"
+              label={t.params.label}
+              title={t.params.title}
+              subtitle={t.params.subtitle}
               light={false}
             />
 
@@ -45,8 +37,7 @@ export default function ParamsSection() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="mt-6 text-xs text-warm-500 leading-relaxed max-w-xs"
             >
-              如需了解特定项目的详细参数配置，请联系我们获取产品手册与技术资料。
-              我们可根据项目需求提供选型建议与定制方案。
+              {t.params.sideNote}
             </motion.p>
           </div>
 
@@ -82,8 +73,7 @@ export default function ParamsSection() {
               className="mt-6 pt-5 border-t border-warm-300/50"
             >
               <p className="text-warm-500 text-xs leading-relaxed">
-                ※ 以上参数为参考值，具体以实际产品配置和项目需求为准。
-                产品规格、颜色及配套配件支持按项目定制，请联系我们获取详细方案。
+                {t.params.bottomNote}
               </p>
             </motion.div>
           </div>

@@ -2,19 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
-interface Stat {
-  value: number
-  suffix: string
-  label: string
-  description: string
-}
-
-const stats: Stat[] = [
-  { value: 10,   suffix: '+',  label: '自动化生产线',    description: '多条现代化生产线，稳定保障产能' },
-  { value: 20,   suffix: '+',  label: '可选瓦型',        description: '覆盖主流与特种屋面应用场景' },
-  { value: 50,   suffix: '+',  label: '颜色与规格选项',  description: '支持客户个性化定制需求' },
-  { value: 1000, suffix: '+',  label: '工程项目服务经验', description: '国内外各类屋面工程项目积累' },
+// 数值与后缀（与语言无关）；label / description 从语言包按序号取
+const statMeta = [
+  { value: 10,   suffix: '+' },
+  { value: 20,   suffix: '+' },
+  { value: 50,   suffix: '+' },
+  { value: 1000, suffix: '+' },
 ]
 
 function Counter({ target, suffix }: { target: number; suffix: string }) {
@@ -48,6 +43,13 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
 }
 
 export default function StatsSection() {
+  const { t } = useLanguage()
+  const stats = t.stats.items.map((item, i) => ({
+    value: statMeta[i].value,
+    suffix: statMeta[i].suffix,
+    label: item.label,
+    description: item.description,
+  }))
   return (
     <section className="py-24 bg-charcoal-800 relative overflow-hidden">
       {/* 背景装饰 */}
@@ -68,11 +70,13 @@ export default function StatsSection() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="mb-16"
         >
-          <span className="section-label">制造实力</span>
+          <span className="section-label">{t.stats.label}</span>
           <div className="w-10 h-px bg-gold-500 my-4 opacity-70" />
-          <h2 className="font-light text-warm-100 leading-tight" style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '-0.02em' }}>
-            以制造实力支撑<br />长期稳定交付
-          </h2>
+          <h2
+            className="font-light text-warm-100 leading-tight"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '-0.02em' }}
+            dangerouslySetInnerHTML={{ __html: t.stats.title }}
+          />
         </motion.div>
 
         {/* 数据卡片 */}

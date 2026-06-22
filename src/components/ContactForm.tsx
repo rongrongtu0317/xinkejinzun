@@ -3,16 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
-
-const projectTypes = [
-  '高端住宅 / 别墅',
-  '商业建筑',
-  '公共建筑',
-  '旧房翻新',
-  '文旅建筑',
-  '海外工程',
-  '其他',
-]
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
 type FormState = {
   name: string
@@ -24,6 +15,8 @@ type FormState = {
 }
 
 export default function ContactForm() {
+  const { t } = useLanguage()
+  const f = t.contactForm
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading]     = useState(false)
   const [error, setError]         = useState<string | null>(null)
@@ -66,7 +59,7 @@ export default function ContactForm() {
 
       if (dbError) {
         console.error('提交失败:', dbError)
-        setError('提交失败，请稍后重试或通过电话联系我们')
+        setError(f.errorDb)
         return
       }
 
@@ -74,7 +67,7 @@ export default function ContactForm() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       console.error('提交错误:', err)
-      setError('网络异常，请检查网络后重试')
+      setError(f.errorNetwork)
     } finally {
       setLoading(false)
     }
@@ -94,9 +87,9 @@ export default function ContactForm() {
               strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h3 className="text-warm-100 text-xl font-light mb-3">需求已提交</h3>
+        <h3 className="text-warm-100 text-xl font-light mb-3">{f.successTitle}</h3>
         <p className="text-charcoal-200 text-sm leading-relaxed max-w-sm mx-auto">
-          感谢您的询问，我们将在 1-2 个工作日内与您联系，提供产品建议与报价方案。
+          {f.successDesc}
         </p>
       </motion.div>
     )
@@ -107,18 +100,18 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">姓名 *</label>
+          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.nameLabel}</label>
           <input
             className="form-input" type="text" name="name"
-            placeholder="您的姓名" required disabled={loading}
+            placeholder={f.namePlaceholder} required disabled={loading}
             value={form.name} onChange={handleChange}
           />
         </div>
         <div>
-          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">联系电话 *</label>
+          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.phoneLabel}</label>
           <input
             className="form-input" type="tel" name="phone"
-            placeholder="手机号 / 固定电话" required disabled={loading}
+            placeholder={f.phonePlaceholder} required disabled={loading}
             value={form.phone} onChange={handleChange}
           />
         </div>
@@ -126,48 +119,48 @@ export default function ContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">邮箱</label>
+          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.emailLabel}</label>
           <input
             className="form-input" type="email" name="email"
-            placeholder="your@email.com" disabled={loading}
+            placeholder={f.emailPlaceholder} disabled={loading}
             value={form.email} onChange={handleChange}
           />
         </div>
         <div>
-          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">所在地区</label>
+          <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.regionLabel}</label>
           <input
             className="form-input" type="text" name="region"
-            placeholder="省份 / 城市" disabled={loading}
+            placeholder={f.regionPlaceholder} disabled={loading}
             value={form.region} onChange={handleChange}
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs text-charcoal-200 tracking-wider mb-2">项目类型 *</label>
+        <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.projectTypeLabel}</label>
         <select
           className="form-input" name="projectType" required disabled={loading}
           value={form.projectType} onChange={handleChange}
         >
-          <option value="" disabled>请选择项目类型</option>
-          {projectTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
+          <option value="" disabled>{f.selectPlaceholder}</option>
+          {f.projectTypes.map((pt) => (
+            <option key={pt} value={pt}>{pt}</option>
           ))}
         </select>
       </div>
 
       <div>
-        <label className="block text-xs text-charcoal-200 tracking-wider mb-2">需求描述</label>
+        <label className="block text-xs text-charcoal-200 tracking-wider mb-2">{f.messageLabel}</label>
         <textarea
           className="form-input resize-none" name="message" rows={5}
-          placeholder="请简要描述项目情况，如屋面面积、建筑类型、颜色偏好、预计工期等，方便我们提供更精准的建议..."
+          placeholder={f.messagePlaceholder}
           disabled={loading} value={form.message} onChange={handleChange}
         />
       </div>
 
       <div className="border border-dashed border-charcoal-600 p-4 text-center">
         <p className="text-charcoal-300 text-xs">
-          如有项目图纸或效果图，可通过邮件发送至我们的联系邮箱，以便提供更准确的产品建议。
+          {f.fileNote}
         </p>
       </div>
 
@@ -194,11 +187,11 @@ export default function ContactForm() {
                 stroke="currentColor" strokeWidth="3"/>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
             </svg>
-            提交中...
+            {f.submitting}
           </>
         ) : (
           <>
-            提交需求
+            {f.submit}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-2">
               <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor"
                 strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -208,7 +201,7 @@ export default function ContactForm() {
       </button>
 
       <p className="text-charcoal-400 text-xs text-center">
-        我们承诺保护您的个人信息，仅用于本次询价与服务沟通。
+        {f.privacyNote}
       </p>
     </form>
   )

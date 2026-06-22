@@ -22,7 +22,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // 挂载后读取 localStorage，恢复上次选择的语言
   useEffect(() => {
     const saved = localStorage.getItem('lang')
-    if (saved === 'en' || saved === 'zh') setLangState(saved)
+    if (saved && saved in translations) setLangState(saved as Lang)
   }, [])
 
   const setLang = (l: Lang) => {

@@ -3,21 +3,24 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { faqs } from '@/data/products'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import { pick } from '@/lib/i18n/translations'
 
 export default function FAQSection() {
+  const { t, lang } = useLanguage()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
     <section className="py-20 bg-charcoal-900">
       <div className="max-w-3xl mx-auto px-6 lg:px-12">
         <div className="mb-12">
-          <span className="section-label">常见问题</span>
+          <span className="section-label">{t.faq.label}</span>
           <div className="w-10 h-px bg-gold-500 my-4 opacity-70" />
           <h2
             className="text-warm-100 font-light leading-tight"
             style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', letterSpacing: '-0.02em' }}
           >
-            您可能想了解的问题
+            {t.faq.title}
           </h2>
         </div>
 
@@ -33,7 +36,7 @@ export default function FAQSection() {
                     openIndex === i ? 'text-gold-400' : 'text-warm-300 group-hover:text-warm-100'
                   }`}
                 >
-                  {faq.q}
+                  {pick(faq.q, lang)}
                 </span>
                 <motion.span
                   animate={{ rotate: openIndex === i ? 45 : 0 }}
@@ -54,7 +57,7 @@ export default function FAQSection() {
                     className="overflow-hidden"
                   >
                     <p className="text-charcoal-200 text-sm leading-relaxed pt-4 pr-8">
-                      {faq.a}
+                      {pick(faq.a, lang)}
                     </p>
                   </motion.div>
                 )}

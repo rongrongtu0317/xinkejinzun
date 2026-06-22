@@ -5,8 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { colorOptions } from '@/data/colors'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
+import { pick } from '@/lib/i18n/translations'
 
 export default function ColorSchemeSection() {
+  const { t, lang } = useLanguage()
   const [active, setActive] = useState(colorOptions[0].id)
   const activeColor = colorOptions.find((c) => c.id === active)!
 
@@ -18,9 +21,9 @@ export default function ColorSchemeSection() {
           {/* 左侧标题 + 色卡 */}
           <div className="lg:w-80 flex-shrink-0">
             <SectionTitle
-              label="屋面配色"
-              title="让屋面颜色成为<br/>建筑气质的一部分"
-              subtitle="根据建筑风格、墙面颜色与项目环境，选择更协调的屋面色彩表达。"
+              label={t.colorScheme.label}
+              title={t.colorScheme.title}
+              subtitle={t.colorScheme.subtitle}
               className="mb-10"
             />
 
@@ -32,8 +35,8 @@ export default function ColorSchemeSection() {
                   onClick={() => setActive(color.id)}
                   className={`color-swatch w-10 h-10 rounded-sm ${active === color.id ? 'active' : ''}`}
                   style={{ backgroundColor: color.hex }}
-                  title={color.name}
-                  aria-label={color.name}
+                  title={pick(color.name, lang)}
+                  aria-label={pick(color.name, lang)}
                 />
               ))}
             </div>
@@ -53,17 +56,17 @@ export default function ColorSchemeSection() {
                     className="w-5 h-5 rounded-sm flex-shrink-0"
                     style={{ backgroundColor: activeColor.hex }}
                   />
-                  <h3 className="text-warm-100 font-medium">{activeColor.name}</h3>
+                  <h3 className="text-warm-100 font-medium">{pick(activeColor.name, lang)}</h3>
                 </div>
                 <p className="text-charcoal-200 text-sm leading-relaxed mb-4">
-                  {activeColor.description}
+                  {pick(activeColor.description, lang)}
                 </p>
                 <div>
                   <span className="text-[10px] text-charcoal-300 tracking-widest uppercase block mb-2">
-                    适用场景
+                    {t.colorScheme.suitableForLabel}
                   </span>
                   <div className="flex flex-wrap gap-2">
-                    {activeColor.suitableFor.map((s) => (
+                    {pick(activeColor.suitableFor, lang).map((s) => (
                       <span key={s} className="text-xs text-charcoal-100 border border-charcoal-600 px-2.5 py-1">
                         {s}
                       </span>
@@ -74,7 +77,7 @@ export default function ColorSchemeSection() {
             </AnimatePresence>
 
             <Link href="/color-schemes" className="btn-outline text-xs mt-8 inline-flex">
-              查看全部配色方案
+              {t.colorScheme.viewAll}
             </Link>
           </div>
 
@@ -120,21 +123,21 @@ export default function ColorSchemeSection() {
 
                   {/* 颜色名标签 */}
                   <div className="absolute bottom-6 left-6">
-                    <span className="text-[10px] text-white/60 tracking-widest uppercase block mb-1">屋面色系</span>
-                    <span className="text-2xl text-white font-light tracking-wide">{activeColor.name}</span>
+                    <span className="text-[10px] text-white/60 tracking-widest uppercase block mb-1">{t.colorScheme.roofColorLabel}</span>
+                    <span className="text-2xl text-white font-light tracking-wide">{pick(activeColor.name, lang)}</span>
                   </div>
 
                   {/* 右上角建筑风格标签 */}
                   <div className="absolute top-6 right-6">
                     <span className="text-xs text-white/50 border border-white/20 px-3 py-1">
-                      {activeColor.buildingStyle}
+                      {pick(activeColor.buildingStyle, lang)}
                     </span>
                   </div>
                 </div>
 
                 {/* 底部提示 */}
                 <p className="text-charcoal-300 text-xs mt-4">
-                  * 屏幕显示颜色与实际产品存在差异，请以实物样品为准。
+                  {t.colorScheme.bottomNote}
                 </p>
               </motion.div>
             </AnimatePresence>

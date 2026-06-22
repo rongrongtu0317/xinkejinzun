@@ -2,55 +2,45 @@
 
 import { motion } from 'framer-motion'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
-const features = [
-  {
-    id: '01',
-    title: '轻质高强',
-    desc: '镀铝锌钢板基材结合高温烧结彩砂，在保持足够强度的前提下显著降低屋面自重，适合新建与旧房翻新项目。',
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 3L6 18h7v15h10V18h7L18 3z" stroke="#3aa45e" strokeWidth="1.2" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: '02',
-    title: '耐候防腐',
-    desc: '多层复合结构设计，基材镀铝锌处理，配合耐候保护层，适应多种气候环境，长期保持稳定的屋面表现。',
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="14" stroke="#3aa45e" strokeWidth="1.2"/>
-        <path d="M18 8v10l6 4" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: '03',
-    title: '色彩丰富',
-    desc: '提供多种颜色与瓦型选择，支持定制颜色匹配，适应现代简约、欧式传统、文旅乡村等不同建筑风格。',
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="4" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2"/>
-        <rect x="20" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.6"/>
-        <rect x="4" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.4"/>
-        <rect x="20" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.8"/>
-      </svg>
-    ),
-  },
-  {
-    id: '04',
-    title: '安装高效',
-    desc: '模块化铺装设计，配件系统完整，包括脊瓦、檐口板、山墙板等，标准化安装流程提升施工效率。',
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M6 18h24M18 6l12 12-12 12" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
+// 仅保留图标与编号，文案从语言包按序号取
+const featureIcons = [
+  (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M18 3L6 18h7v15h10V18h7L18 3z" stroke="#3aa45e" strokeWidth="1.2" strokeLinejoin="round"/>
+    </svg>
+  ),
+  (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="14" stroke="#3aa45e" strokeWidth="1.2"/>
+      <path d="M18 8v10l6 4" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  ),
+  (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <rect x="4" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2"/>
+      <rect x="20" y="4" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.6"/>
+      <rect x="4" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.4"/>
+      <rect x="20" y="20" width="12" height="12" rx="1" stroke="#3aa45e" strokeWidth="1.2" opacity="0.8"/>
+    </svg>
+  ),
+  (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M6 18h24M18 6l12 12-12 12" stroke="#3aa45e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
 ]
 
 export default function FeatureSection() {
+  const { t } = useLanguage()
+  const features = t.feature.items.map((item, i) => ({
+    id: String(i + 1).padStart(2, '0'),
+    title: item.title,
+    desc: item.desc,
+    icon: featureIcons[i],
+  }))
+
   return (
     <section className="py-24 lg:py-32 bg-warm-100 relative overflow-hidden">
       {/* 背景装饰线 */}
@@ -67,9 +57,9 @@ export default function FeatureSection() {
           {/* 左侧标题 */}
           <div>
             <SectionTitle
-              label="核心价值"
-              title="从材料结构到屋面效果，<br/>全面提升建筑长期价值"
-              subtitle="每一块彩石金属瓦背后，是多层复合结构与严格工艺的支撑，为建筑屋面提供长期稳定的性能保障。"
+              label={t.feature.label}
+              title={t.feature.title}
+              subtitle={t.feature.subtitle}
               light={false}
             />
 
@@ -82,8 +72,7 @@ export default function FeatureSection() {
               className="mt-10 pl-5 border-l-2 border-gold-500"
             >
               <p className="text-warm-600 text-sm leading-relaxed italic">
-                "彩石金属瓦不只是屋面覆盖材料，更是建筑长期价值
-                与美观表达的一部分。"
+                {t.feature.quote}
               </p>
             </motion.blockquote>
           </div>

@@ -3,46 +3,20 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useLanguage } from '@/lib/i18n/LanguageProvider'
 
-const layers = [
-  {
-    id: 1,
-    name: '表层耐候保护层',
-    desc: '抵御紫外线、雨水侵蚀，保持色彩长期稳定，延长产品使用寿命。',
-    color: 'rgba(58,164,94,0.9)',
-    height: '28px',
-  },
-  {
-    id: 2,
-    name: '高温烧结彩砂层',
-    desc: '天然彩色砂粒经高温烧结固化，呈现自然石材质感，色彩饱满均匀。',
-    color: 'rgba(160,128,80,0.85)',
-    height: '36px',
-  },
-  {
-    id: 3,
-    name: '粘结复合层',
-    desc: '将彩砂与基材牢固结合，确保彩砂层不脱落，保证结构整体性。',
-    color: 'rgba(100,100,100,0.8)',
-    height: '16px',
-  },
-  {
-    id: 4,
-    name: '镀铝锌钢板基材',
-    desc: '核心承力层，优质镀铝锌处理，提供高强度与优异防腐性能，轻质耐用。',
-    color: 'rgba(80,100,120,0.9)',
-    height: '40px',
-  },
-  {
-    id: 5,
-    name: '背面防护层',
-    desc: '背面涂层保护，防止基材在安装过程中受损，延长整体使用寿命。',
-    color: 'rgba(60,70,80,0.85)',
-    height: '20px',
-  },
+// 颜色与高度（结构性，与语言无关）；名称/说明从语言包按序号取
+const layerStyles = [
+  { color: 'rgba(58,164,94,0.9)',  height: '28px' },
+  { color: 'rgba(160,128,80,0.85)', height: '36px' },
+  { color: 'rgba(100,100,100,0.8)', height: '16px' },
+  { color: 'rgba(80,100,120,0.9)',  height: '40px' },
+  { color: 'rgba(60,70,80,0.85)',   height: '20px' },
 ]
 
-function LayerBar({ layer, index }: { layer: typeof layers[0]; index: number }) {
+interface Layer { name: string; desc: string; color: string; height: string }
+
+function LayerBar({ layer, index }: { layer: Layer; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -40, width: '20%' }}
@@ -87,8 +61,16 @@ function LayerBar({ layer, index }: { layer: typeof layers[0]; index: number }) 
 
 export default function MaterialStructure() {
   const ref = useRef<HTMLElement>(null)
+  const { t } = useLanguage()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const lineH = useTransform(scrollYProgress, [0.1, 0.6], ['0%', '100%'])
+
+  const layers: Layer[] = t.material.layers.map((l, i) => ({
+    name: l.name,
+    desc: l.desc,
+    color: layerStyles[i].color,
+    height: layerStyles[i].height,
+  }))
 
   return (
     <section
@@ -110,9 +92,9 @@ export default function MaterialStructure() {
           {/* 左侧标题 + 说明 */}
           <div className="lg:sticky lg:top-32">
             <SectionTitle
-              label="材料结构"
-              title="多层复合结构，<br/>成就稳定屋面性能"
-              subtitle="彩石金属瓦由五层复合结构组成，每层针对屋面性能的特定需求设计，确保产品在多种气候条件下的长期稳定表现。"
+              label={t.material.label}
+              title={t.material.title}
+              subtitle={t.material.subtitle}
             />
 
             <motion.div
@@ -123,8 +105,7 @@ export default function MaterialStructure() {
               className="mt-10 p-5 border border-charcoal-600"
             >
               <p className="text-charcoal-100 text-xs leading-loose">
-                以上结构为标准产品示意，实际产品规格以出厂配置为准。
-                如需了解特定项目的产品技术细节，请联系我们获取详细资料。
+                {t.material.note}
               </p>
             </motion.div>
 
@@ -148,12 +129,12 @@ export default function MaterialStructure() {
               className="flex items-center gap-2 mb-4"
             >
               <div className="w-8 h-px bg-gold-500 opacity-50" />
-              <span className="text-[10px] text-charcoal-200 tracking-widest uppercase">截面剖析示意</span>
+              <span className="text-[10px] text-charcoal-200 tracking-widest uppercase">{t.material.sectionLabel}</span>
               <div className="flex-1 h-px bg-charcoal-700" />
             </motion.div>
 
             {layers.map((layer, i) => (
-              <LayerBar key={layer.id} layer={layer} index={i} />
+              <LayerBar key={layer.name} layer={layer} index={i} />
             ))}
 
             {/* 底部尺寸标注 */}
@@ -164,8 +145,8 @@ export default function MaterialStructure() {
               transition={{ delay: 1, duration: 0.6 }}
               className="mt-6 pt-6 border-t border-charcoal-700 flex items-center justify-between"
             >
-              <span className="text-[10px] text-charcoal-300 tracking-wider">常规总厚度参考</span>
-              <span className="text-gold-500 text-sm font-light tracking-widest">约 0.4mm 基材</span>
+              <span className="text-[10px] text-charcoal-300 tracking-wider">{t.material.thicknessLabel}</span>
+              <span className="text-gold-500 text-sm font-light tracking-widest">{t.material.thicknessValue}</span>
             </motion.div>
           </div>
 
