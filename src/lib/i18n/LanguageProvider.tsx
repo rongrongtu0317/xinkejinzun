@@ -25,6 +25,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (saved && saved in translations) setLangState(saved as Lang)
   }, [])
 
+  // 把当前语言写到 <html data-lang>，供 CSS 做按语言的字号微调（俄语整体略缩小）
+  useEffect(() => {
+    document.documentElement.setAttribute('data-lang', lang)
+  }, [lang])
+
   const setLang = (l: Lang) => {
     setLangState(l)
     try {

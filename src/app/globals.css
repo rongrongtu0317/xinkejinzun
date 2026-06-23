@@ -88,6 +88,12 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 按语言微调字号：西里尔（俄语）词较长，等字号下显得更大更挤，
+   整体下调根字号（rem 基准）让所有俄语文字略小一圈。改这个百分比即可调节。 */
+html[data-lang="ru"] {
+  font-size: 90%;
+}
+
 body {
   background-color: #111111;
   color: #f5f1ec;
